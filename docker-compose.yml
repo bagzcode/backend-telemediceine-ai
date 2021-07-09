@@ -1,0 +1,27 @@
+version: "3.9"
+services:
+  cxr_app:
+    build: ./cxr_app/
+    container_name: cxr_app
+    ports:
+      - "8001:80"
+    command: ["/start-reload.sh"]
+    volumes:
+      - ./cxr_app/v1:/app/app
+  ct_app:
+    build: ./ct_app/
+    container_name: ct_app
+    ports:
+      - "8002:80"
+    command: ["/start-reload.sh"]
+    volumes:
+      - ./ct_app/v1:/app/app
+  blood_ap:
+    build: ./blood_app/
+    container_name: blood_app
+    ports:
+      - "8003:80"
+    command: ["/start-reload.sh"]
+    volumes:
+      - ./blood_app/v1:/app/app
+    
