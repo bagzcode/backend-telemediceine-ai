@@ -4,10 +4,10 @@ services:
     build: ./nginx/
     container_name: nginx
     ports:
-      - "80:80"
+      - "PORT_TO_BE_REPLACED:80"
     environment:
       - NGINX_PORT=80
-      - SERVER_ADDRESS=172.24.0.1
+      - SERVER_ADDRESS=SERVER_ADDRESS_TO_BE_REPLACED
   cxr_app:
     build: ./cxr_app/
     container_name: cxr_app

@@ -12,11 +12,12 @@ from fastapi.staticfiles import StaticFiles
 
 
 app = FastAPI(
-        title="Numed",
-        description="Numed-CT: Documentation",
+        title="NuMed",
+        description="NuMed-CT: Documentation",
         version="0.1.0",
         docs_url=None,
         redoc_url=None,
+        root_path="/api/v1/ct-app"
         )
 
 
@@ -34,7 +35,7 @@ app.mount("/static", StaticFiles(directory="/app/app/static"), name="static")
 @app.get("/docs", include_in_schema=False)
 async def custom_swagger_ui_html():
     return get_swagger_ui_html(
-        openapi_url=app.openapi_url,
+        openapi_url="/api/v1/ct-app/openapi.json",
         title=app.title,
         swagger_favicon_url="/static/logo.png",
     )
@@ -42,14 +43,14 @@ async def custom_swagger_ui_html():
 @app.get("/redoc", include_in_schema=False)
 async def redoc_html():
     return get_redoc_html(
-        openapi_url=app.openapi_url,
+        openapi_url="/api/v1/ct-app/openapi.json",
         title=app.title + " - ReDoc",
         redoc_favicon_url="/static/logo.png",
     )
 
 @app.get("/", include_in_schema=False)
 async def root():
-    response = RedirectResponse(url='/docs')
+    response = RedirectResponse(url='/api/v1/ct-app/docs')
     return response
 
 
