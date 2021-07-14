@@ -121,6 +121,11 @@ async def insert_data(data: Data):
         a = covid_detect('/app/app/covid_detect',df)
         probapredict=np.asarray(a)[0][0][0]
         classpredict=np.asarray(a)[1][0][0]
+
+        if(probapredict<0.5):
+            probapredict = 1-probapredict
+            classpredict = (classpredict+1)%2
+
         return {"status":"success","probapredict":probapredict,'classpredict':classpredict}
     except Exception as e:
         return {"status":"error", "probapredict":0,'classpredict':0,"err_message": str(e)}
