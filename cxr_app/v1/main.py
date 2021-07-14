@@ -118,7 +118,7 @@ async def upload_image(image: ImageData):
     except Exception as e:
 
         result = {
-            "status":"erros",
+            "status":"error",
             "image_data": res_classifier['img_str'],
             "pneumonia" : res_classifier['result']['pneumonia'],
             "covid" : res_classifier['result']['covid'],
