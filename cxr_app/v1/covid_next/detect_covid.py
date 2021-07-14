@@ -81,6 +81,7 @@ class Classifier():
         heatmap_resized = cv2.resize(heatmap.detach().numpy(), (img.shape[1], img.shape[0]))
         heatmap_resized = np.uint8(255 * heatmap_resized)
         heatmap_resized = cv2.applyColorMap(heatmap_resized, cv2.COLORMAP_JET)
+        heatmap_resized = cv2.cvtColor(heatmap_resized, cv2.COLOR_BGR2RGB)
         superimposed_img = np.uint8(heatmap_resized * 0.2 + 0.8*img)
 
         # cv2.imwrite(output_pth, superimposed_img)
