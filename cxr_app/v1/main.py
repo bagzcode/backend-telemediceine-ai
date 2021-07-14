@@ -76,4 +76,10 @@ async def create_item(image: ImageData):
     buffered = BytesIO()
     rotated.save(buffered, format="PNG")
     img_str = base64.b64encode(buffered.getvalue())
-    return img_str
+    result = {
+        "image_data": img_str,
+        "pneumonia" : "60",
+        "covid" : "20",
+        "normal" : "20"
+    }
+    return result
