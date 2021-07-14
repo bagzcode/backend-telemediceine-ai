@@ -119,10 +119,10 @@ async def upload_image(image: ImageData):
 
         result = {
             "status":"error",
-            "image_data": res_classifier['img_str'],
-            "pneumonia" : res_classifier['result']['pneumonia'],
-            "covid" : res_classifier['result']['covid'],
-            "normal" : res_classifier['result']['normal'],
+            "image_data": "0",
+            "pneumonia" : "0",
+            "covid" : "0",
+            "normal" : "0",
             "err_message": str(e)
         }
 
