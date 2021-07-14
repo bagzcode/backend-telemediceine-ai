@@ -102,13 +102,28 @@ async def upload_image(image: ImageData):
     #     "normal" : "20"
     # }
 
-    res_classifier = classifier.detect(str(image.data))
+    try:
+        res_classifier = classifier.detect(str(image.data))
 
-    result = {
-        "image_data": res_classifier['img_str'],
-        "pneumonia" : res_classifier['result']['pneumonia'],
-        "covid" : res_classifier['result']['covid'],
-        "normal" : res_classifier['result']['normal']
-    }
+        result = {
+            "status":"success",
+            "image_data": res_classifier['img_str'],
+            "pneumonia" : res_classifier['result']['pneumonia'],
+            "covid" : res_classifier['result']['covid'],
+            "normal" : res_classifier['result']['normal']
+        }
 
-    return result
+        return result
+
+    except Exception as e:
+
+        result = {
+            "status":"erros",
+            "image_data": res_classifier['img_str'],
+            "pneumonia" : res_classifier['result']['pneumonia'],
+            "covid" : res_classifier['result']['covid'],
+            "normal" : res_classifier['result']['normal'],
+            "err_message": str(e)
+        }
+
+        return result

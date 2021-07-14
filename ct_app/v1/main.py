@@ -209,38 +209,51 @@ async def root():
 @app.post("/image/")
 async def upload_image(image: ImageData):
 
-    image = load_and_preprocess_simple(str(image.data))
+    try:
+        image = load_and_preprocess_simple(str(image.data))
 
-    # Run Grad-CAM
-    # heatmap, class_pred, class_prob = run_gradcam(final_conv, pooled_grads, sess, image)
-    tmp = run_gradcam(final_conv, pooled_grads, sess, image)
+        # Run Grad-CAM
+        # heatmap, class_pred, class_prob = run_gradcam(final_conv, pooled_grads, sess, image)
+        tmp = run_gradcam(final_conv, pooled_grads, sess, image)
 
-    # print(tmp)
-    heatmap = tmp[0]
-    class_pred = tmp[1]
-    class_prob = tmp[2]
+        # print(tmp)
+        heatmap = tmp[0]
+        class_pred = tmp[1]
+        class_prob = tmp[2]
 
-    heatmap_resized = np.uint8(255 * heatmap)
-    heatmap_resized = cv2.applyColorMap(heatmap_resized, cv2.COLORMAP_JET)
-    heatmap_resized = cv2.cvtColor(heatmap_resized, cv2.COLOR_BGR2RGB)
+        heatmap_resized = np.uint8(255 * heatmap)
+        heatmap_resized = cv2.applyColorMap(heatmap_resized, cv2.COLORMAP_JET)
+        heatmap_resized = cv2.cvtColor(heatmap_resized, cv2.COLOR_BGR2RGB)
 
-    superimposed_img = np.uint8(heatmap_resized * 0.4 + 0.6*np.uint8(255 * image[0]))
+        superimposed_img = np.uint8(heatmap_resized * 0.4 + 0.6*np.uint8(255 * image[0]))
 
-    im = Image.fromarray(superimposed_img)
-    buffered = BytesIO()
-    im.save(buffered, format="PNG")
-    img_str = base64.b64encode(buffered.getvalue())
+        im = Image.fromarray(superimposed_img)
+        buffered = BytesIO()
+        im.save(buffered, format="PNG")
+        img_str = base64.b64encode(buffered.getvalue())
 
-    # result = {
-    #     "image_data": img_str,
-    #     "diagnosis" : CLASS_NAMES[class_pred],
-    #     "confidence" : np.array(class_prob)
-    # }
+        # result = {
+        #     "image_data": img_str,
+        #     "diagnosis" : CLASS_NAMES[class_pred],
+        #     "confidence" : np.array(class_prob)
+        # }
 
-    result = {
-        "image_data": img_str,
-        "diagnosis" : CLASS_NAMES[class_pred],
-        "confidence" : float(class_prob)
-    }
+        result = {
+            "status":"success",
+            "image_data": img_str,
+            "diagnosis" : CLASS_NAMES[class_pred],
+            "confidence" : float(class_prob)
+        }
 
-    return result
+        return result
+    except Exception as e:
+
+        result = {
+            "status":"error",
+            "image_data": "0",
+            "diagnosis" : "0",
+            "confidence" : 0,
+            "err_message": str(e)
+        }
+
+        return result

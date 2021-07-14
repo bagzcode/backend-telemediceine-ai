@@ -116,8 +116,11 @@ async def root():
 
 @app.post("/data")
 async def insert_data(data: Data):  
-    df = pd.DataFrame(data=data.data,index=[0])
-    a = covid_detect('/app/app/covid_detect',df)
-    probapredict=np.asarray(a)[0][0][0]
-    classpredict=np.asarray(a)[1][0][0]
-    return {"probapredict":probapredict,'classpredict':classpredict}
+    try:
+        df = pd.DataFrame(data=data.data,index=[0])
+        a = covid_detect('/app/app/covid_detect',df)
+        probapredict=np.asarray(a)[0][0][0]
+        classpredict=np.asarray(a)[1][0][0]
+        return {"status":"success","probapredict":probapredict,'classpredict':classpredict}
+    except Exception as e:
+        return {"status":"error", "probapredict":0,'classpredict':0,"err_message": str(e)}
