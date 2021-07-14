@@ -47,7 +47,7 @@ class Data(BaseModel):
                                 'WBC':9.2,
                                 'RBC':5.21,
                                 'HGB':14.9,
-                                'HCT':42.7,
+                                'HCT':42.7, #ini
                                 'MCV':82.0,
                                 'MCH':28.6,
                                 'MCHC':34.9,
@@ -55,7 +55,7 @@ class Data(BaseModel):
                                 'NE': 71.3350245095,
                                 'LY': 19.9802433558,
                                 'MO': 7.5754192206,
-                                'EO': 0.7748073824,
+                                'EO': 0.7748073824, # ini
                                 'BA': 0.3310749999,
                                 'NET':5.6426761346,
                                 'LYT':1.3666621586,
@@ -117,6 +117,17 @@ async def root():
 @app.post("/data")
 async def insert_data(data: Data):  
     try:
+
+        if (data.data['HCT'] > 100 or data.data['HCT'] < 0):
+            raise Exception('HCT error')
+
+        if (data.data['EO'] > 100 or data.data['EO'] < 0):
+            raise Exception('EO error')
+
+        for key, value in data.data.items():
+            if value < 0:
+                raise Exception(f'{key} error')
+
         df = pd.DataFrame(data=data.data,index=[0])
         a = covid_detect('/app/app/covid_detect',df)
         probapredict=np.asarray(a)[0][0][0]
